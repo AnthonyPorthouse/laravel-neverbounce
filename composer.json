@@ -7,7 +7,6 @@
         "name": "James Fenwick",
         "email": "james.fenwick@groundsix.com"
     }],
-    "minimum-stability": "dev",
     "require": {
         "neverbounce/neverbounce-php": "v3.0.0"
     },

@@ -2,7 +2,9 @@
 
 namespace Groundsix\Neverbounce;
 
+use Log;
 use NeverBounce\API\NB_Single;
+use NeverBounce\API\NB_Exception;
 
 class NeverBounce
 {
@@ -22,7 +24,8 @@ class NeverBounce
     {
         try {
             $valid = $this->app->verify($email)->is(NB_Single::GOOD);
-        } catch (Exception $e) {
+        } catch (NB_Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
             $valid = false;
         }
 

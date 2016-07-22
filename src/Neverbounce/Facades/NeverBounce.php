@@ -1,7 +1,8 @@
 <?php
 
-namespace Groundsix\Neverbounce;
+namespace Groundsix\Neverbounce\Facades;
 
+use Groundsix\Neverbounce\NeverBounce as NeverBounceConcrete;
 use Illuminate\Support\Facades\Facade;
 
 class NeverBounce extends Facade
@@ -13,6 +14,6 @@ class NeverBounce extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'NeverBounce';
+        return NeverBounceConcrete::class;
     }
 }

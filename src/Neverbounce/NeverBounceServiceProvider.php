@@ -3,8 +3,10 @@
 namespace Groundsix\Neverbounce;
 
 use Illuminate\Support\ServiceProvider;
-use Neverbounce\App\NB_Auth;
-use Neverbounce\App\NB_Single;
+use NeverBounce;
+use NeverBounce\API\NB_Auth;
+use NeverBounce\API\NB_Single;
+use Validator;
 
 class NeverBounceServiceProvider extends ServiceProvider
 {
@@ -16,14 +18,12 @@ class NeverBounceServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/config/neverbounce.php' => $this->app->configPath().'/'.'neverbounce.php',
         ], 'config');
-    }
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
+        $this->app->validator->extend('neverbounce', function ($attribute, $value, $parameters, $validator) {
+            return NeverBounce::valid($value);
+        },
+        'It is not possible to send to this email address');
+    }
 
     /**
      * Register the service provider.
@@ -42,23 +42,13 @@ class NeverBounceServiceProvider extends ServiceProvider
     {
         $config = $this->app->config['neverbounce'];
 
-        $this->app->singleton(NB_Single::class, function ($app) {
-            NB_Auth::auth($config['key'], $config['id'], $config['router'], $config['version']);
+        $this->app->singleton(NB_Single::class, function ($app) use ($config) {
+            NB_Auth::auth($config['secret_key'], $config['key'], $config['router'], $config['version']);
 
             return NB_Single::app();
         });
         $this->app->singleton(NeverBounce::class, function ($app) {
-            return new NeverBounce();
+            return new NeverBounce($this->app->make(NB_Single::class));
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [NB_Single::class, NeverBounce::class];
     }
 }

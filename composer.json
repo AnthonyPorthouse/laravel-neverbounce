@@ -9,12 +9,11 @@
     }],
     "minimum-stability": "dev",
     "require": {
-        "laravel/support": "5.2.*",
         "neverbounce/neverbounce-php": "v3.0.0"
     },
     "autoload": {
         "psr-4": {
-            "Groundsix\\Neverbounce\\": "src"
+            "Groundsix\\": "src"
         }
-  },
+    }
 }

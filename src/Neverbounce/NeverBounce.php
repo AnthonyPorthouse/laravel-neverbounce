@@ -23,7 +23,7 @@ class NeverBounce
     public function valid($email)
     {
         try {
-            $valid = $this->app->verify($email)->is(NB_Single::GOOD);
+            $valid = $this->app->verify($email)->is(config('neverbounce.valid_results', 'valid'));
         } catch (NB_Exception $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
             $valid = false;
